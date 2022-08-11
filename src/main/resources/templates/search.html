@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Keresés</title>
+</head>
+<body>
+<form method="get">
+  Szöveg: <input type="text" name="search">
+  <p><button type="submit">Keresés</button></p>
+</form>
+<h1>Keresés eredménye</h1>
+<ul>
+  <li data-th-each="row: ${result}" data-th-text="${row}"></li>
+</ul>
+</body>
+</html>

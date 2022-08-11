@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -134,6 +135,24 @@ public class TaskController {
         model.addAttribute("result", entries);
 
         return "result";
+    }
+
+    @GetMapping("/search-entries")
+    public String searchEntries(
+            @RequestParam(name = "search", required = false) String search,
+            Model model
+    ) {
+        List<BlogEntry> entries;
+
+        if (search == null) {
+             entries = (List<BlogEntry>) repository.findAll();
+        } else {
+            entries = repository.findByContentContaining(search);
+        }
+
+        model.addAttribute("result", entries);
+
+        return "search";
     }
 
     @GetMapping("/task8")
