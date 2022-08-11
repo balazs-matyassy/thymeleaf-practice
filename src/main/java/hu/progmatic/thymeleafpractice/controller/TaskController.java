@@ -166,4 +166,26 @@ public class TaskController {
         return "result";
     }
 
+    // Összes publikált Java bejegyzés
+    @GetMapping("/task11")
+    public String task11(Model model) {
+        // findByCategoryAndPublished: mindkettő feltételnek teljesülnie kell
+        // findByCategoryOrPublished: elég, ha az egyik teljesül
+        List<BlogEntry> entries = repository.findByCategoryAndPublished("Java", true);
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    // Összes Java bejegyzés létrehozás dátuma alapján rendezve
+    @GetMapping("/task12")
+    public String task12(Model model) {
+        // findByCategoryAndPublished: mindkettő feltételnek teljesülnie kell
+        // findByCategoryOrPublished: elég, ha az egyik teljesül
+        List<BlogEntry> entries = repository.findByCategoryOrderByCreated("Java");
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
 }
