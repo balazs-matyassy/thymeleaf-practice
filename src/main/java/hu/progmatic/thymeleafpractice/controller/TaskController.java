@@ -237,4 +237,19 @@ public class TaskController {
         return "result";
     }
 
+    // TASK16: /task16/{rating}
+    // Listázzuk ki azokat a bejegyzéseket,
+    // ahol a rating a megadott érték és 5 között van.
+    // Pl. rating = 3 esetében a 3 és 5 csillagos bejegyzéseket.
+    // 1. Metódus létrehozása a BlogEntryRepository-ban.
+    // https://www.baeldung.com/spring-data-derived-queries
+    // 2. Endpoint megvalósítása (pl. task14 hasonló)
+
+    // TASK17: /task17/{rating}
+    // Listázzuk ki azokat a publikált bejegyzéseket,
+    // ahol az értékelés legalább a megadott paraméter.
+    // 1. Metódus létrehozása a BlogEntryRepository-ban.
+    // https://www.baeldung.com/spring-data-derived-queries
+    // 2. Endpoint megvalósítása (pl. task14 hasonló)
+
 }
