@@ -89,8 +89,12 @@ public class TaskController {
     // 2. endpoint megjeleníti a toStringet
 
     // JPA Gyakorlás
-    // https://www.baeldung.com/spring-data-jpa-query
+    // SPRING DATA JPA:
+    // Spring automatikusan generál nekünk egy repository-t.
+    // Nem kell közvetlenül az EntityManagerrel és SQL (vagy JPQL) lekérdezésekkel foglalkoznunk.
     // https://www.baeldung.com/spring-data-derived-queries
+
+    // https://www.baeldung.com/spring-data-jpa-query
     // https://www.baeldung.com/transaction-configuration-with-jpa-and-spring
 
     @GetMapping("/create-entries")
@@ -180,9 +184,25 @@ public class TaskController {
     // Összes Java bejegyzés létrehozás dátuma alapján rendezve
     @GetMapping("/task12")
     public String task12(Model model) {
-        // findByCategoryAndPublished: mindkettő feltételnek teljesülnie kell
-        // findByCategoryOrPublished: elég, ha az egyik teljesül
         List<BlogEntry> entries = repository.findByCategoryOrderByCreated("Java");
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    // Mainál régebbi bejegyzések
+    @GetMapping("/task13")
+    public String task13(Model model) {
+        List<BlogEntry> entries = repository.findByCreatedLessThan(LocalDate.now());
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    // Összes adott kategóriával rendelkező bejegyzés
+    @GetMapping("/task14/{search}")
+    public String task14(@PathVariable String search, Model model) {
+        List<BlogEntry> entries = repository.findByContentContaining(search);
         model.addAttribute("result", entries);
 
         return "result";
