@@ -29,6 +29,9 @@ public interface BlogEntryRepository extends CrudRepository<BlogEntry, Long> {
     // Query futtatása + eredményhalmaz visszaadása listaként,
     // továbbra is generálásra kerül (továbbra is a Spring Data JPA feladata).
     @Query("SELECT b FROM BlogEntry b WHERE b.published = false")
-    List<BlogEntry> findAllUnpublishedBlogEntries();
+    List<BlogEntry> findAllUnpublished();
+
+    @Query("SELECT b FROM BlogEntry b WHERE b.published = true AND b.rating >= :rating")
+    List<BlogEntry> findAllPublishedByMinRating(int rating);
 
 }

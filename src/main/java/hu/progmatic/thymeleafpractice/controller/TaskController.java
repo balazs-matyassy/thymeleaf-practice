@@ -2,7 +2,6 @@ package hu.progmatic.thymeleafpractice.controller;
 
 import hu.progmatic.thymeleafpractice.model.BlogEntry;
 import hu.progmatic.thymeleafpractice.repository.BlogEntryRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -231,7 +230,7 @@ public class TaskController {
     // Összes nem publikált bejegyzés
     @GetMapping("/task15")
     public String task15(Model model) {
-        List<BlogEntry> entries = repository.findAllUnpublishedBlogEntries();
+        List<BlogEntry> entries = repository.findAllUnpublished();
         model.addAttribute("result", entries);
 
         return "result";
@@ -251,5 +250,14 @@ public class TaskController {
     // 1. Metódus létrehozása a BlogEntryRepository-ban.
     // https://www.baeldung.com/spring-data-derived-queries
     // 2. Endpoint megvalósítása (pl. task14 hasonló)
+
+    // Összes legalább a megadott értékeléssel rendelkező publikált bejegyzés.
+    @GetMapping("/task18/{rating}")
+    public String task18(@PathVariable int rating, Model model) {
+        List<BlogEntry> entries = repository.findAllPublishedByMinRating(rating);
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
 
 }
