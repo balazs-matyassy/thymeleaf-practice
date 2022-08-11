@@ -5,6 +5,7 @@ import hu.progmatic.thymeleafpractice.repository.BlogEntryRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -87,6 +88,11 @@ public class TaskController {
     // 1. endpoint megjeleníti az űrlapot
     // 2. endpoint megjeleníti a toStringet
 
+    // JPA Gyakorlás
+    // https://www.baeldung.com/spring-data-jpa-query
+    // https://www.baeldung.com/spring-data-derived-queries
+    // https://www.baeldung.com/transaction-configuration-with-jpa-and-spring
+
     @GetMapping("/create-entries")
     public String createEntries() {
         repository.save(new BlogEntry(
@@ -104,6 +110,14 @@ public class TaskController {
         repository.save(new BlogEntry(
                 "Title4", "Content4 (mediocre)", "Java",
                 3, true, LocalDate.now()
+        ));
+        repository.save(new BlogEntry(
+                "Draft1", "Draft content 1 (Java)", "Java",
+                0, false, LocalDate.now().minusDays(100)
+        ));
+        repository.save(new BlogEntry(
+                "Draft2", "Draft content 2 (Python)", "Python",
+                0, false, LocalDate.now().minusDays(25)
         ));
 
         return "redirect:/list-entries";
@@ -129,6 +143,24 @@ public class TaskController {
                         5, true, LocalDate.now()
                 )
         );
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    // Összes Javaval kapcsolatos bejegyzés?
+    @GetMapping("/task9")
+    public String task9(Model model) {
+        List<BlogEntry> entries = repository.findByCategory("Java");
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    // Összes adott kategóriával rendelkező bejegyzés
+    @GetMapping("/task10/{category}")
+    public String task10(@PathVariable String category, Model model) {
+        List<BlogEntry> entries = repository.findByCategory(category);
         model.addAttribute("result", entries);
 
         return "result";
