@@ -2,6 +2,7 @@ package hu.progmatic.thymeleafpractice.controller;
 
 import hu.progmatic.thymeleafpractice.model.BlogEntry;
 import hu.progmatic.thymeleafpractice.repository.BlogEntryRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -203,6 +204,15 @@ public class TaskController {
     @GetMapping("/task14/{search}")
     public String task14(@PathVariable String search, Model model) {
         List<BlogEntry> entries = repository.findByContentContaining(search);
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    // Összes nem publikált bejegyzés
+    @GetMapping("/task15")
+    public String task15(Model model) {
+        List<BlogEntry> entries = repository.findAllUnpublishedBlogEntries();
         model.addAttribute("result", entries);
 
         return "result";
