@@ -1,8 +1,14 @@
 package hu.progmatic.thymeleafpractice.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
+@Entity
 public class BlogEntry {
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String title;
