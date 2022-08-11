@@ -1,6 +1,7 @@
 package hu.progmatic.thymeleafpractice.controller;
 
 import hu.progmatic.thymeleafpractice.model.BlogEntry;
+import hu.progmatic.thymeleafpractice.repository.BlogEntryRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,11 @@ import java.util.List;
 
 @Controller
 public class TaskController {
+    private final BlogEntryRepository repository;
+
+    public TaskController(BlogEntryRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping("/task1")
     public String task1(Model model) {
@@ -80,5 +86,52 @@ public class TaskController {
     // 2 endpoint + 2 view
     // 1. endpoint megjeleníti az űrlapot
     // 2. endpoint megjeleníti a toStringet
+
+    @GetMapping("/create-entries")
+    public String createEntries() {
+        repository.save(new BlogEntry(
+                "Title1", "Content1", "Python",
+                4, true, LocalDate.now()
+        ));
+        repository.save(new BlogEntry(
+                "Title2", "Content2", "Java",
+                5, true, LocalDate.now()
+        ));
+        repository.save(new BlogEntry(
+                "Title3", "Content3 (boring)", "Python",
+                2, true, LocalDate.now()
+        ));
+        repository.save(new BlogEntry(
+                "Title4", "Content4 (mediocre)", "Java",
+                3, true, LocalDate.now()
+        ));
+
+        return "redirect:/list-entries";
+    }
+
+    @GetMapping("/list-entries")
+    public String listEntries(Model model) {
+        List<BlogEntry> entries = (List<BlogEntry>) repository.findAll();
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    @GetMapping("/task8")
+    public String task8(Model model) {
+        List<BlogEntry> entries = List.of(
+                new BlogEntry(
+                        "Title1", "Content1", "Python",
+                        4, true, LocalDate.now()
+                ),
+                new BlogEntry(
+                        "Title2", "Content2", "Java",
+                        5, true, LocalDate.now()
+                )
+        );
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
 
 }
