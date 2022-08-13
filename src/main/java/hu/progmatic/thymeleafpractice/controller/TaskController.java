@@ -1,7 +1,9 @@
 package hu.progmatic.thymeleafpractice.controller;
 
 import hu.progmatic.thymeleafpractice.model.BlogEntry;
+import hu.progmatic.thymeleafpractice.model.Log;
 import hu.progmatic.thymeleafpractice.repository.BlogEntryRepository;
+import hu.progmatic.thymeleafpractice.repository.LogRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +17,14 @@ import java.util.List;
 public class TaskController {
     private final BlogEntryRepository repository;
 
-    public TaskController(BlogEntryRepository repository) {
+    private final LogRepository logRepository;
+
+    public TaskController(BlogEntryRepository repository, LogRepository logRepository) {
         this.repository = repository;
+        this.logRepository = logRepository;
     }
+
+    // https://www.baeldung.com/spring-thymeleaf-fragments
 
     @GetMapping("/task1")
     public String task1(Model model) {
@@ -256,6 +263,49 @@ public class TaskController {
     public String task18(@PathVariable int rating, Model model) {
         List<BlogEntry> entries = repository.findAllPublishedByMinRating(rating);
         model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    @GetMapping("/increase/{category}")
+    public String increase(@PathVariable String category, Model model) {
+        List<BlogEntry> entries = repository.findByCategory(category);
+
+        for (BlogEntry entry : entries) {
+            entry.setRating(entry.getRating() + 1);
+            repository.save(entry);
+        }
+
+        model.addAttribute("result", entries);
+
+        return "result";
+    }
+
+    @GetMapping("/create-logs")
+    public String createLogs(Model model) {
+        logRepository.save(new Log("Lorem Ipsum", LocalDate.now()));
+        logRepository.save(new Log("Hello World", LocalDate.now()));
+        logRepository.save(new Log("Hello User", LocalDate.now()));
+
+        List<Log> logs = (List<Log>) logRepository.findAll();
+        model.addAttribute("result", logs);
+
+        return "result";
+    }
+
+    @GetMapping("/list-logs")
+    public String listLogs(Model model) {
+        List<Log> logs = (List<Log>) logRepository.findAll();
+        model.addAttribute("result", logs);
+
+        return "result";
+    }
+
+    // Összes adott üzenettel rendelkező log bejegyzés
+    @GetMapping("/task19/{search}")
+    public String task19(@PathVariable String search, Model model) {
+        List<Log> logs = (List<Log>) logRepository.findByMessageContaining(search);
+        model.addAttribute("result", logs);
 
         return "result";
     }
