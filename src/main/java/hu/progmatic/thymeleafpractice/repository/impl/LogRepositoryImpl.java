@@ -29,6 +29,13 @@ public class LogRepositoryImpl implements LogRepository {
 
     @Override
     public List<Log> findByMessageContaining(String search) {
+        // JPQL query (majdnem SQL, de pl. tábla nevek helyett osztályok / entitások vannak)
+
+        // Nem közvetlenül hozzáadni a query-hez felhasználótól származó bemenetet.
+        // Pl. search = "; DROP TABLE user;" (SQL injection támadás)
+        // setParameter véd az SQL injection ellen, mivel szövegként szúrja be (escaping)
+        // a felhasználói bemenetet.
+
         List<Log> logs = entityManager.createQuery(
                 "SELECT l FROM Log l WHERE l.message LIKE :search",
                         Log.class
