@@ -35,6 +35,7 @@ public class LogRepositoryImpl implements LogRepository {
         // Pl. search = "; DROP TABLE user;" (SQL injection támadás)
         // setParameter véd az SQL injection ellen, mivel szövegként szúrja be (escaping)
         // a felhasználói bemenetet.
+        // Ilyet NEM!!! ""SELECT l FROM Log l WHERE l.message LIKE %" + search + "%" (SQL injection)
 
         List<Log> logs = entityManager.createQuery(
                 "SELECT l FROM Log l WHERE l.message LIKE :search",
